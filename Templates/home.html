@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+<div class="bg-primary text-white py-5 mb-5 shadow-sm">
+    <div class="container text-center py-5">
+        <h1 class="display-4 fw-bold">Bienvenue sur Cymput</h1>
+        <p class="lead mb-4">La meilleure plateforme pour acheter et vendre des PCs au Maroc.</p>
+        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+            <a href="{% url 'Product' %}" class="btn btn-light btn-lg px-4 gap-3 fw-bold text-primary">Acheter un PC</a>
+            <a href="{% url 'publier' %}" class="btn btn-outline-light btn-lg px-4 fw-bold">Vendre le mien</a>
+        </div>
+    </div>
+</div>
+
+<div class="container mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="fw-bold">Dernières Annonces</h3>
+        <a href="{% url 'Product' %}" class="text-primary text-decoration-none fw-bold">Voir tout →</a>
+    </div>
+
+    <div class="row g-4">
+        {% for item in latest_products %}
+        <div class="col-md-3">
+            <div class="card h-100 border-0 shadow-sm rounded-3 overflow-hidden">
+                {% if item.image %}
+                    <img src="{{ item.image.url }}" class="card-img-top" style="height: 180px; object-fit: cover;">
+                {% else %}
+                    <img src="{% static 'images/default_pc.png' %}" class="card-img-top" style="height: 180px; object-fit: cover;">
+                {% endif %}
+                <div class="card-body p-3">
+                    <h6 class="card-title fw-bold text-truncate">{{ item.title }}</h6>
+                    <p class="text-primary fw-bold mb-2">{{ item.price }} DH</p>
+                    <div class="d-flex justify-content-between align-items-center mt-2">
+                        <small class="text-muted"><i class="bi bi-geo-alt"></i> {{ item.seller.profile.city|default:"Maroc" }}</small>
+                        <a href="{% url 'product_detail' item.id %}" class="btn btn-sm btn-outline-primary py-0">Détails</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center py-5">
+            <p class="text-muted">Aucune annonce pour le moment.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

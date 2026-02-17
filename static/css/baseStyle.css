@@ -1,0 +1,8 @@
+body{
+    background-image: url('../img/t.jpeg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    height: 100vh;
+    margin: 0;
+}

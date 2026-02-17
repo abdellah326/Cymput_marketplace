@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="container py-5">
+    <div class="row mb-4">
+        <div class="col-12 text-center">
+            <h2 class="fw-bold">Mon Tableau de Bord</h2>
+            <p class="text-muted">Gérez vos informations et vos annonces</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="card shadow-sm border-0 mb-4 text-center p-4">
+                <div class="profile-image-container mb-3">
+                    <img src="{{ user.profile.image.url }}" class="rounded-circle img-thumbnail" 
+                         style="width: 150px; height: 150px; object-fit: cover;" alt="Profile Picture">
+                </div>
+                <h4 class="fw-bold">{{ user.username }}</h4>
+                <p class="text-muted">{{ user.email }}</p>
+                <hr>
+                <div class="text-start small">
+                    <p><i class="bi bi-geo-alt-fill me-2 text-primary"></i>{{ user.profile.city|default:"Ville non spécifiée" }}</p>
+                    <p><i class="bi bi-telephone-fill me-2 text-primary"></i>{{ user.profile.phone|default:"Aucun numéro" }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0 p-4 mb-4">
+                <h5 class="fw-bold mb-4 border-bottom pb-2">Modifier mes informations</h5>
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold">Numéro de téléphone</label>
+                            <input type="text" name="phone" class="form-control" value="{{ user.profile.phone }}">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold">Ville</label>
+                            <input type="text" name="city" class="form-control" value="{{ user.profile.city }}">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label small fw-bold">Photo de profil</label>
+                            <input type="file" name="image" class="form-control">
+                        </div>
+                        <div class="col-12 mt-4 text-end">
+                            <button type="submit" class="btn btn-primary px-5 py-2 fw-bold shadow-sm">
+                                Enregistrer les modifications
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="card shadow-sm border-0 p-4">
+                <h5 class="fw-bold mb-4 border-bottom pb-2">Mes Produits mis en vente</h5>
+                <div class="row g-3">
+                    {% if products %}
+                        {% for product in products %}
+                        <div class="col-md-6">
+                            <div class="card h-100 border rounded-3 overflow-hidden">
+                                <div class="row g-0">
+                                    {% if product.image %}
+
+                                    <img src="{{ product.image.url }}" class="img-fluid" alt="{{ product.name }}">
+
+                                    {% else %}
+
+                                    <img src="{% static 'images/default_pc.png' %}" class="img-fluid" alt="No image">
+
+                                    {% endif %}
+                                    <div class="col-8">
+                                        <div class="card-body p-2">
+                                            <h6 class="card-title  mb-1 fw-bold">{{ product.description }}</h6>
+                                            <p class="text-primary fw-bold small mb-0">{{ product.price }} DH</p>
+                                            <div class="mt-2">
+                                                <a href="{% url 'delete_product' product.id %}" class="btn btn-sm btn-outline-danger py-0" onclick="return confirm('are you sure ?')">Supprimer</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="col-12 text-center py-4">
+                            <p class="text-muted italic">Vous n'avez aucun produit pour le moment.</p>
+                            <a href="{% url 'publier' %}" class="btn btn-sm btn-outline-primary">Ajouter votre premier PC</a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

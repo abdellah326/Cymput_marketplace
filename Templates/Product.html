@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5">
+    <h2 class="fw-bold mb-4">Toutes les annonces</h2>
+    
+    <div class="row g-4">
+        {% for item in items %}
+        <div class="col-md-4 col-lg-3">
+            <div class="card h-100 shadow-sm border-0">
+                {% if item.image %}
+                    <img src="{{ item.image.url }}" class="card-img-top" style="height: 200px; object-fit: cover;">
+                {% else %}
+                    <img src="{% static 'images/default_pc.png' %}" class="card-img-top">
+                {% endif %}
+                
+                <div class="card-body">
+                    <h5 class="card-title fw-bold">{{ item.title }}</h5>
+                    <p class="text-primary fw-bold">{{ item.price }} DH</p>
+                    <p class="text-muted small text-truncate">{{ item.description }}</p>
+                    <hr>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="badge bg-light text-dark"><i class="bi bi-geo-alt"></i> {{ item.seller.profile.city|default:"Maroc" }}</span>
+                        <a href="{% url 'product_detail' item.id %}" class="btn btn-sm btn-primary">Détails</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center py-5">
+            <h3>Aucun produit disponible pour le moment.</h3>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
