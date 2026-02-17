@@ -36,6 +36,9 @@
    ```bash
    git clone https://github.com/abdellah326/Cymput_marketplace.git
    cd Cymput-Project
-  2. **run the project :**
-     python3 manage.py runserver
+2. **run the project :**
+      ```bash
+      python3 manage.py runserver
+
+ 
      
